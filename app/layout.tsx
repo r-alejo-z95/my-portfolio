@@ -10,7 +10,7 @@ const jetbrainsMono = JetBrains_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'Mi Portfolio - Full Stack Developer',
+  title: 'Full Stack Developer - Ramon A. Zambrano',
   description: 'Portfolio de desarrollador full stack especializado en Next.js y tecnologías modernas',
 }
 
