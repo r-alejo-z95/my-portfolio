@@ -12,7 +12,7 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
     
     const variants = {
       default: '',
-      interactive: 'hover:border-green-400 transition-colors group cursor-pointer'
+      interactive: 'hover:border-green-400 transition-colors group'
     }
     
     const paddings = {
