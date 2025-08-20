@@ -14,7 +14,7 @@ const navigationItems = [
 
 export default function Navigation({ currentPath }: NavigationProps) {
   return (
-    <nav className="flex gap-6">
+    <nav className="hidden lg:flex gap-6">
       {navigationItems.map(({ href, label, icon: Icon }) => {
         const isActive = currentPath === href
         

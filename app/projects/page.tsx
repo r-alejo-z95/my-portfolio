@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import ProjectsSection from '@/components/sections/ProjectsSection'
 
 export const metadata: Metadata = {
-  title: 'Proyectos',
+  title: 'Proyectos - Ramon',
   description: 'Explora mis proyectos de desarrollo web y aplicaciones.',
 }
 

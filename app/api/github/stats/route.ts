@@ -3,51 +3,53 @@ import { NextResponse } from 'next/server'
 export async function GET() {
   try {
     const GITHUB_TOKEN = process.env.GITHUB_TOKEN
-    const GITHUB_USERNAME = process.env.GITHUB_USERNAME || 'tu-usuario'
+    const GITHUB_USERNAME = process.env.GITHUB_USERNAME
 
-    if (!GITHUB_TOKEN) {
-      throw new Error('GITHUB_TOKEN no está configurado')
+    if (!GITHUB_TOKEN || !GITHUB_USERNAME) {
+      return NextResponse.json(
+        { error: 'GitHub credentials not configured' },
+        { status: 500 }
+      )
     }
 
-    // Obtener información del usuario
-    const userResponse = await fetch(
-      `https://api.github.com/users/${GITHUB_USERNAME}`,
-      {
+    const [userResponse, reposResponse] = await Promise.all([
+      fetch(`https://api.github.com/users/${GITHUB_USERNAME}`, {
         headers: {
           'Authorization': `Bearer ${GITHUB_TOKEN}`,
           'Accept': 'application/vnd.github.v3+json'
         },
         next: { revalidate: 3600 }
-      }
-    )
-
-    // Obtener repositorios para estadísticas
-    const reposResponse = await fetch(
-      `https://api.github.com/users/${GITHUB_USERNAME}/repos?per_page=100`,
-      {
+      }),
+      fetch(`https://api.github.com/users/${GITHUB_USERNAME}/repos?per_page=100`, {
         headers: {
           'Authorization': `Bearer ${GITHUB_TOKEN}`,
           'Accept': 'application/vnd.github.v3+json'
         },
         next: { revalidate: 3600 }
-      }
-    )
+      })
+    ])
 
     if (!userResponse.ok || !reposResponse.ok) {
-      throw new Error('Error fetching GitHub data')
+      throw new Error('Failed to fetch GitHub data')
     }
 
-    const user = await userResponse.json()
-    const repos = await reposResponse.json()
+    const [user, repos] = await Promise.all([
+      userResponse.json(),
+      reposResponse.json()
+    ])
 
-    // Calcular estadísticas
-    const publicRepos = repos.filter((repo: any) => !repo.private)
-    const languages = publicRepos.reduce((acc: any, repo: any) => {
+    // Calcular estadísticas reales
+    const publicRepos = repos.filter((repo: any) => !repo.private && !repo.fork)
+    const totalStars = publicRepos.reduce((sum: number, repo: any) => sum + repo.stargazers_count, 0)
+    const totalForks = publicRepos.reduce((sum: number, repo: any) => sum + repo.forks_count, 0)
+
+    // Calcular lenguajes
+    const languages: { [key: string]: number } = {}
+    publicRepos.forEach((repo: any) => {
       if (repo.language) {
-        acc[repo.language] = (acc[repo.language] || 0) + 1
+        languages[repo.language] = (languages[repo.language] || 0) + 1
       }
-      return acc
-    }, {})
+    })
 
     const primaryLanguage = Object.keys(languages).reduce((a, b) =>
       languages[a] > languages[b] ? a : b, 'JavaScript'
@@ -55,11 +57,12 @@ export async function GET() {
 
     const stats = {
       totalRepos: user.public_repos,
-      totalCommits: 1247, // Esto requeriría más llamadas a la API para calcularlo exactamente
-      totalStars: publicRepos.reduce((sum: number, repo: any) => sum + repo.stargazers_count, 0),
-      totalForks: publicRepos.reduce((sum: number, repo: any) => sum + repo.forks_count, 0),
+      totalStars,
+      totalForks,
       primaryLanguage,
-      contributionCount: 365 // Esto también requeriría la API de GraphQL
+      followers: user.followers,
+      following: user.following,
+      languageStats: languages
     }
 
     return NextResponse.json(stats)
@@ -67,7 +70,7 @@ export async function GET() {
   } catch (error) {
     console.error('Error fetching GitHub stats:', error)
     return NextResponse.json(
-      { error: 'Error al obtener estadísticas' },
+      { error: 'Failed to fetch stats' },
       { status: 500 }
     )
   }
