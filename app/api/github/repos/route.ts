@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import type { GitHubRepo } from '@/types/github'
 
 export async function GET() {
   try {
@@ -28,12 +29,11 @@ export async function GET() {
       throw new Error(`GitHub API error: ${response.status}`)
     }
 
-    const repos = await response.json()
+    const repos: GitHubRepo[] = await response.json()
 
-    // Filtrar y formatear repos
     const formattedRepos = repos
-      .filter((repo: any) => !repo.fork && !repo.private) // Solo repos originales y públicos
-      .map((repo: any) => ({
+      .filter((repo) => !repo.fork && !repo.private)
+      .map((repo) => ({
         id: repo.id,
         name: repo.name,
         full_name: repo.full_name,

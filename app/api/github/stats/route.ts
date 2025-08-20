@@ -1,4 +1,11 @@
 import { NextResponse } from 'next/server'
+import type { GitHubRepo } from '@/types/github'
+
+interface GitHubUser {
+  public_repos: number;
+  followers: number;
+  following: number;
+}
 
 export async function GET() {
   try {
@@ -33,19 +40,17 @@ export async function GET() {
       throw new Error('Failed to fetch GitHub data')
     }
 
-    const [user, repos] = await Promise.all([
+    const [user, repos]: [GitHubUser, GitHubRepo[]] = await Promise.all([
       userResponse.json(),
       reposResponse.json()
     ])
 
-    // Calcular estadísticas reales
-    const publicRepos = repos.filter((repo: any) => !repo.private && !repo.fork)
-    const totalStars = publicRepos.reduce((sum: number, repo: any) => sum + repo.stargazers_count, 0)
-    const totalForks = publicRepos.reduce((sum: number, repo: any) => sum + repo.forks_count, 0)
+    const publicRepos = repos.filter((repo) => !repo.private && !repo.fork)
+    const totalStars = publicRepos.reduce((sum, repo) => sum + repo.stargazers_count, 0)
+    const totalForks = publicRepos.reduce((sum, repo) => sum + repo.forks_count, 0)
 
-    // Calcular lenguajes
     const languages: { [key: string]: number } = {}
-    publicRepos.forEach((repo: any) => {
+    publicRepos.forEach((repo) => {
       if (repo.language) {
         languages[repo.language] = (languages[repo.language] || 0) + 1
       }

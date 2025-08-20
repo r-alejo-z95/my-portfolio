@@ -3,11 +3,11 @@ import { useEffect, useState } from 'react'
 import GitHubStats from '@/components/github/GitHubStats'
 import ContributionGraph from '@/components/github/ContributionGraph'
 import RepoCard from '@/components/github/RepoCard'
-import type { GitHubRepo } from '@/types/github'
+import type { GitHubRepo, GitHubStats as GitHubStatsType } from '@/types/github'
 
 export default function GitHubSection() {
   const [repos, setRepos] = useState<GitHubRepo[]>([])
-  const [stats, setStats] = useState<any>(null)
+  const [stats, setStats] = useState<GitHubStatsType | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 

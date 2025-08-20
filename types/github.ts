@@ -12,6 +12,8 @@ export interface GitHubRepo {
   updated_at: string
   topics: string[]
   private: boolean
+  fork: boolean
+  homepage: string | null
 }
 
 export interface GitHubStats {
@@ -21,6 +23,8 @@ export interface GitHubStats {
   totalForks: number
   primaryLanguage: string
   contributionCount: number
+  followers: number
+  languageStats: { [key: string]: number }
 }
 
 export interface ContributionDay {

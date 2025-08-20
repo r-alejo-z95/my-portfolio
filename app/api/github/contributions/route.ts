@@ -1,5 +1,15 @@
 import { NextResponse } from 'next/server'
 
+interface ContributionDay {
+  contributionCount: number;
+  date: string;
+  weekday: number;
+}
+
+interface Week {
+  contributionDays: ContributionDay[];
+}
+
 export async function GET() {
   try {
     const GITHUB_TOKEN = process.env.GITHUB_TOKEN
@@ -12,7 +22,6 @@ export async function GET() {
       )
     }
 
-    // Query simplificada - sin filtros de fecha para obtener TODO el año actual
     const query = `
       query($username: String!) {
         user(login: $username) {
@@ -59,14 +68,13 @@ export async function GET() {
 
     const calendar = data.data.user.contributionsCollection.contributionCalendar
     
-    // Procesar todas las contribuciones sin modificar nada
-    const allContributions: { date: any; count: number; level: number; weekday: number }[] = []
+    const allContributions: { date: string; count: number; level: number; weekday: number }[] = []
     let totalDays = 0
     let daysWithContributions = 0
     
-    calendar.weeks.forEach((week: { contributionDays: any[] }, weekIndex: any) => {
+    calendar.weeks.forEach((week: Week) => {
       
-      week.contributionDays.forEach((day, dayIndex) => {
+      week.contributionDays.forEach((day: ContributionDay) => {
         totalDays++
         if (day.contributionCount > 0) {
           daysWithContributions++
@@ -81,7 +89,6 @@ export async function GET() {
       })
     })
 
-    // Verificar si hay contribuciones perdidas
     const contributionsMap = new Map()
     allContributions.forEach(contrib => {
       if (contrib.count > 0) {
