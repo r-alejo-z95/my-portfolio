@@ -13,7 +13,7 @@ export default function HeroSection() {
 
   return (
     <section className={`transition-all duration-700 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'} flex flex-col `}>
-      <div className="flex flex-col-reverse items-center md:flex-row md:justify-between md:items-start mb-8">
+      <div className="flex flex-col-reverse items-center md:flex-row md:justify-between md:items-start lg:mr-16 mb-8">
           <div>
             <div className="text-green-400 text-sm mb-2 font-mono">$ whoami</div>
             <h1 className="text-4xl md:text-6xl font-mono font-bold text-white mb-4 leading-tight">
@@ -22,8 +22,8 @@ export default function HeroSection() {
             </h1>
             <div className="text-gray-400 font-mono text-lg max-w-2xl leading-relaxed">
               <span className="text-green-400">&gt;</span> Construyendo experiencias web modernas<br />
-              <span className="text-green-400">&gt;</span> Next.js, React, Node.js<br />
-              <span className="text-green-400">&gt;</span> Apasionado por el código limpio
+              <span className="text-green-400">&gt;</span> Next.js, React, Node.js, Supabase<br />
+              <span className="text-green-400">&gt;</span> Apasionado por el código
             </div>
           </div>
           <div className="w-[200px] h-[200px] md:w-[300px] md:h-[300px] mb-24 md:mb-8">

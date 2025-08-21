@@ -55,7 +55,6 @@ export default function ContactSection() {
       }
     } catch (error) {
       console.error('Error:', error)
-      // Aquí podrías mostrar un toast o notificación de error
     } finally {
       setIsSubmitting(false)
     }
@@ -92,7 +91,7 @@ export default function ContactSection() {
             className="flex items-center gap-3 text-gray-400 hover:text-green-400 transition-colors"
           >
             <Github size={20} />
-            <span>github.com/tu-usuario</span>
+            <span>github.com/r-alejo-z95</span>
           </Link>
           <Link 
             href={SOCIAL_LINKS.linkedin}
@@ -101,7 +100,7 @@ export default function ContactSection() {
             className="flex items-center gap-3 text-gray-400 hover:text-green-400 transition-colors"
           >
             <Linkedin size={20} />
-            <span>linkedin.com/in/tu-usuario</span>
+            <span>linkedin.com/in/ralejo-zambrano</span>
           </Link>
         </div>
 

@@ -21,7 +21,7 @@ export const SKILLS = {
 } as const
 
 export const SOCIAL_LINKS = {
-  github: 'https://github.com/tu-usuario',
-  email: 'tu@email.com',
-  linkedin: 'https://linkedin.com/in/tu-usuario'
+  github: 'https://github.com/r-alejo-z95',
+  email: 'r.alejo.z95@protonmail.com',
+  linkedin: 'https://linkedin.com/in/ralejo-zambrano'
 } as const
