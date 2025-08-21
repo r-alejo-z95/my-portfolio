@@ -7,7 +7,6 @@ export default function HomePage() {
     <div className="space-y-16">
       <HeroSection />
       <SkillsSection />
-      <ProjectsSection />
     </div>
   )
 }
