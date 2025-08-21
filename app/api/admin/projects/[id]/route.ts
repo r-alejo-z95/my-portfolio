@@ -3,7 +3,7 @@ import { NextResponse, type NextRequest } from 'next/server'
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const supabase = await createClient()
 
@@ -13,7 +13,8 @@ export async function DELETE(
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  const projectId = params.id
+  // Await params para obtener los parámetros
+  const { id: projectId } = await params
 
   if (!projectId) {
     return NextResponse.json({ error: 'Project ID is required' }, { status: 400 })
