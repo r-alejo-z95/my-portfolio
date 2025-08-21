@@ -3,12 +3,11 @@ import { useEffect, useState } from 'react'
 import GitHubStats from '@/components/github/GitHubStats'
 import ContributionGraph from '@/components/github/ContributionGraph'
 import { SOCIAL_LINKS } from '@/lib/constants'
-import type { GitHubRepo, GitHubStats as GitHubStatsType } from '@/types/github'
+import type { GitHubStats as GitHubStatsType } from '@/types/github'
 import Link from 'next/link'
 import { Github } from 'lucide-react'
 
 export default function GitHubSection() {
-  const [repos, setRepos] = useState<GitHubRepo[]>([])
   const [stats, setStats] = useState<GitHubStatsType | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -16,21 +15,13 @@ export default function GitHubSection() {
   useEffect(() => {
     async function fetchGitHubData() {
       try {
-        const [reposResponse, statsResponse] = await Promise.all([
-          fetch('/api/github/repos'),
-          fetch('/api/github/stats')
-        ])
+        const statsResponse = await fetch('/api/github/stats')
 
-        if (!reposResponse.ok || !statsResponse.ok) {
+        if (!statsResponse.ok) {
           throw new Error('Failed to fetch GitHub data')
         }
 
-        const [reposData, statsData] = await Promise.all([
-          reposResponse.json(),
-          statsResponse.json()
-        ])
-
-        setRepos(reposData)
+        const statsData = await statsResponse.json()
         setStats(statsData)
       } catch (err) {
         setError('Error loading GitHub data')
