@@ -22,7 +22,7 @@ export default function HeroSection() {
             </h1>
             <div className="text-gray-400 font-mono text-lg max-w-2xl leading-relaxed">
               <span className="text-green-400">&gt;</span> Construyendo experiencias web modernas<br />
-              <span className="text-green-400">&gt;</span> Next.js, React, Node.js, Supabase<br />
+              <span className="text-green-400">&gt;</span> Next.js, React, Node.js, PostgreSQL<br />
               <span className="text-green-400">&gt;</span> Apasionado por el código
             </div>
           </div>

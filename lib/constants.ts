@@ -1,22 +1,15 @@
-export const NAVIGATION_ITEMS = [
-  { href: '/', label: '~/home', section: 'home' },
-  { href: '/projects', label: '~/projects', section: 'projects' },
-  { href: '/github', label: '~/github', section: 'github' },
-  { href: '/contact', label: '~/contact', section: 'contact' }
-] as const
-
 export const SKILLS = {
   frontend: {
     title: 'Frontend',
-    technologies: ['React', 'Next.js', 'TypeScript', 'Tailwind CSS', 'Framer Motion']
+    technologies: ['React', 'Next.js', 'TypeScript', 'Tailwind CSS', 'Framer Motion', 'shadcn']
   },
   backend: {
     title: 'Backend', 
-    technologies: ['Node.js', 'Express', 'PostgreSQL', 'MongoDB', 'Prisma']
+    technologies: ['Node.js', 'Express', 'PostgreSQL', 'Supabase', 'Neon', 'Prisma', 'REST APIs', 'GraphQL']
   },
   tools: {
     title: 'Herramientas',
-    technologies: ['Git', 'Docker', 'Vercel', 'AWS', 'Figma']
+    technologies: ['Git', 'Vercel', 'Netlify', 'Figma']
   }
 } as const
 
