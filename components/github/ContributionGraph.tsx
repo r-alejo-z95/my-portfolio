@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react'
 import Card from '@/components/ui/Card'
+import Tippy from '@tippyjs/react'
 
 interface ContributionDay {
   date: string
@@ -108,7 +109,7 @@ export default function ContributionGraph() {
       <div className="flex justify-center">
         <div className="flex overflow-x-auto">
           {/* Etiquetas de días de la semana (fijas a la izquierda) */}
-          <div className="flex flex-col gap-1 text-xs text-gray-400 font-mono mr-3 mt-4">
+          <div className="flex flex-col pt-1.5 gap-1 text-xs text-gray-400 font-mono mr-3 mt-4">
             <div className="h-3"></div> {/* Domingo - vacío */}
             <div className="h-3 flex items-center">Lun</div>
             <div className="h-3"></div> {/* Martes - vacío */}
@@ -121,7 +122,7 @@ export default function ContributionGraph() {
           {/* Contenedor del gráfico con scroll */}
           <div className="overflow-x-auto max-w-4xl">
             {/* Etiquetas de meses (fijas arriba) */}
-            <div className="flex gap-1 mb-1 text-xs text-gray-400 font-mono min-w-max">
+            <div className="flex pl-0.5 gap-1 mb-1 text-xs text-gray-400 font-mono min-w-max">
               {weeks.map((week, weekIndex) => {
                 if (week[0]) {
                   const date = new Date(week[0].date)
@@ -140,11 +141,16 @@ export default function ContributionGraph() {
               {weeks.map((week, weekIndex) => (
                 <div key={weekIndex} className="flex flex-col gap-1">
                   {week.map((day, dayIndex) => (
-                    <div
-                      key={`${day.date}-${weekIndex}-${dayIndex}`}
-                      className={`w-3 h-3 border ${getIntensityClass(day.level)} hover:ring-1 hover:ring-green-400 cursor-pointer transition-all rounded-sm`}
-                      title={`${day.count} contribution${day.count !== 1 ? 's' : ''} on ${formatDate(day.date)}.`}
-                    />
+                    <Tippy 
+                    key={`${day.date}-${weekIndex}-${dayIndex}`}
+                    content={day.count === 0 ? `No contributions on ${formatDate(day.date)}` : `${day.count} contribution${day.count !== 1 ? 's' : ''} on ${formatDate(day.date)}`}
+                    delay={[200, 0]}
+                    className='bg-black/40 backdrop-blur-xs text-white text-xs px-2 py-1 shadow-lg'
+                    >
+                      <div
+                        className={`w-3 h-3 border ${getIntensityClass(day.level)} hover:ring-1 hover:ring-green-400 cursor-pointer transition-all rounded-sm`}
+                      />
+                    </Tippy>
                   ))}
                 </div>
               ))}
