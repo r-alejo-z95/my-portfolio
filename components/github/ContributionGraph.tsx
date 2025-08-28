@@ -49,11 +49,10 @@ export default function ContributionGraph() {
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString)
-    return date.toLocaleDateString('es-ES', {
-      weekday: 'long',
-      year: 'numeric',
+    return date.toLocaleDateString('en', {
       month: 'long',
-      day: 'numeric'
+      day: 'numeric',
+      timeZone: 'UTC'
     })
   }
 
@@ -128,7 +127,7 @@ export default function ContributionGraph() {
                   const date = new Date(week[0].date)
                   const isFirstOfMonth = date.getDate() <= 7 // Primera semana del mes
                   if (isFirstOfMonth || weekIndex === 0) {
-                    const monthName = date.toLocaleDateString('es-ES', { month: 'short' })
+                    const monthName = date.toLocaleDateString('es-ES', { month: 'short', timeZone: 'UTC' })
                     return <div key={weekIndex} className="w-3 text-center">{monthName}</div>
                   }
                 }
@@ -137,14 +136,14 @@ export default function ContributionGraph() {
             </div>
             
             {/* Grid de contribuciones */}
-            <div className="flex gap-1 min-w-max pb-2">
+            <div className="flex gap-1 min-w-max p-0.5 pb-2">
               {weeks.map((week, weekIndex) => (
                 <div key={weekIndex} className="flex flex-col gap-1">
                   {week.map((day, dayIndex) => (
                     <div
                       key={`${day.date}-${weekIndex}-${dayIndex}`}
                       className={`w-3 h-3 border ${getIntensityClass(day.level)} hover:ring-1 hover:ring-green-400 cursor-pointer transition-all rounded-sm`}
-                      title={`${day.count} contribución${day.count !== 1 ? 'es' : ''} el ${formatDate(day.date)}`}
+                      title={`${day.count} contribution${day.count !== 1 ? 's' : ''} on ${formatDate(day.date)}.`}
                     />
                   ))}
                 </div>
