@@ -8,7 +8,7 @@ export const SKILLS = {
     technologies: ['Node.js', 'Express', 'PostgreSQL', 'Supabase', 'Neon', 'Prisma', 'REST APIs', 'GraphQL']
   },
   tools: {
-    title: 'Herramientas',
+    title: 'Tools',
     technologies: ['Git', 'Vercel', 'Netlify', 'Figma']
   }
 } as const

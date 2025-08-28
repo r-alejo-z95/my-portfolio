@@ -9,7 +9,7 @@ export async function GET() {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-  // Validación más robusta de variables de entorno
+  // More robust validation of environment variables
   if (!supabaseUrl || !supabaseServiceRoleKey) {
     console.error('Missing Supabase environment variables');
     return NextResponse.json(
@@ -21,7 +21,7 @@ export async function GET() {
   const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
   try {
-    // Verificar si el archivo existe antes de descargarlo
+    // Verify if the file exists before downloading it
     const { data: fileInfo, error: listError } = await supabase.storage
       .from(BUCKET_NAME)
       .list('', { search: CV_FILENAME });
@@ -42,7 +42,7 @@ export async function GET() {
       );
     }
 
-    // Descargar el archivo
+    // Download the file
     const { data, error } = await supabase.storage
       .from(BUCKET_NAME)
       .download(CV_FILENAME);
@@ -74,7 +74,7 @@ export async function GET() {
   } catch (error) {
     console.error('Unexpected error in download-cv API:', error);
     
-    // Log más detallado del error para debugging
+    // More detailed error logging for debugging
     if (error instanceof Error) {
       console.error('Error details:', {
         name: error.name,

@@ -25,7 +25,7 @@ export default function RepoCard({ repo }: RepoCardProps) {
       </div>
       
       <p className="text-gray-400 font-mono text-sm mb-4 leading-relaxed">
-        {repo.description || 'No hay descripción disponible'}
+        {repo.description || 'No description available'}
       </p>
       
       <div className="flex items-center justify-between">

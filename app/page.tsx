@@ -30,8 +30,8 @@ export default function HomePage() {
         isOpen={showDialog}
         onClose={() => setShowDialog(false)}
         onConfirm={handleDialogConfirm}
-        title="Confirmar Descarga"
-        message="¿Quieres descargar el CV de Ramon?"
+        title="Confirm Download"
+        message="Do you want to download Ramon's CV?"
       />
     </div>
   )

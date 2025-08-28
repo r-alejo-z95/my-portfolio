@@ -42,9 +42,9 @@ const Dialog: React.FC<DialogProps> = ({ isOpen, onClose, onConfirm, title, mess
         <p className="text-gray-300 mb-6">{message}</p>
         <div className="flex justify-end space-x-4">
           <Button variant="outline" onClick={onClose}>
-            Cancelar
+            Cancel
           </Button>
-          <Button onClick={onConfirm}>Confirmar</Button>
+          <Button onClick={onConfirm}>Confirm</Button>
         </div>
       </Card>
     </div>

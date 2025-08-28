@@ -18,7 +18,7 @@ export default function HeroSection({ onDownloadRequest, className }: HeroSectio
   }, [])
 
   const handleDownloadCV = async () => {
-    if (isDownloading) return; // Prevenir múltiples descargas simultáneas
+    if (isDownloading) return; // Prevent multiple simultaneous downloads
     
     setIsDownloading(true);
     
@@ -31,9 +31,9 @@ export default function HeroSection({ onDownloadRequest, className }: HeroSectio
 
       const blob = await response.blob();
       
-      // Verificar que el blob no esté vacío
+      // Check that the blob is not empty
       if (blob.size === 0) {
-        throw new Error('El archivo descargado está vacío');
+        throw new Error('Downloaded file is empty');
       }
 
       const url = window.URL.createObjectURL(blob);
@@ -41,27 +41,27 @@ export default function HeroSection({ onDownloadRequest, className }: HeroSectio
       link.href = url;
       link.download = 'Ramon_Zambrano_developer.pdf';
       
-      // Hacer la descarga más robusta
+      // Make the download more robust
       document.body.appendChild(link);
       link.click();
       
-      // Cleanup con timeout para asegurar que la descarga se complete
+      // Cleanup with timeout to ensure download completes
       setTimeout(() => {
         document.body.removeChild(link);
         window.URL.revokeObjectURL(url);
       }, 100);
       
     } catch (error) {
-      console.error('Error durante la descarga del CV:', error);
+      console.error('Error during CV download:', error);
       
-      // Mensaje de error más específico basado en el tipo de error
-      let errorMessage = 'Error al descargar el CV. Por favor, inténtalo de nuevo más tarde.';
+      // More specific error message based on error type
+      let errorMessage = 'Error downloading CV. Please try again later.';
       
       if (error instanceof Error) {
         if (error.message.includes('HTTP error')) {
-          errorMessage = 'El servidor no está disponible. Inténtalo más tarde.';
-        } else if (error.message.includes('vacío')) {
-          errorMessage = 'El archivo está vacío o corrupto.';
+          errorMessage = 'Server is unavailable. Please try again later.';
+        } else if (error.message.includes('empty')) {
+          errorMessage = 'File is empty or corrupted.';
         }
       }
       
@@ -81,33 +81,33 @@ export default function HeroSection({ onDownloadRequest, className }: HeroSectio
             <span className="text-green-400">Developer</span>
           </h1>
           <div className="text-gray-400 font-mono text-lg max-w-2xl leading-relaxed">
-            <span className="text-green-400">&gt;</span> Construyendo experiencias web modernas<br />
+            <span className="text-green-400">&gt;</span> Building modern web experiences<br />
             <span className="text-green-400">&gt;</span> Next.js, React, Node.js, PostgreSQL<br />
-            <span className="text-green-400">&gt;</span> Apasionado por el código
+            <span className="text-green-400">&gt;</span> Passionate about code
           </div>
         </div>
         <div className="w-[200px] h-[200px] md:w-[300px] md:h-[300px] mb-24 md:mb-8">
           <Image
             src="/ramon.png"
-            alt="Foto de Ramon"
+            alt="Photo of Ramon"
             width={1024}
             height={1536}
             className="rounded-full object-center object-cover"
-            priority // Añadir priority para la imagen principal
+            priority // Add priority for the main image
           />
         </div>
       </div>
       
       <div className="flex gap-4 mb-12 flex-wrap self-center md:self-start">
         <Link href="/projects">
-          <Button variant="primary">Ver Proyectos</Button>
+          <Button variant="primary">View Projects</Button>
         </Link>
         <Button 
           variant="outline" 
           onClick={() => onDownloadRequest(handleDownloadCV)}
           disabled={isDownloading}
         >
-          {isDownloading ? 'Descargando...' : 'Descargar CV'}
+          {isDownloading ? 'Downloading...' : 'Download CV'}
         </Button>
       </div>
     </section>

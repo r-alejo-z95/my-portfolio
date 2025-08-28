@@ -7,13 +7,13 @@ export async function DELETE(
 ) {
   const supabase = await createClient()
 
-  // 1. Verificar que el usuario esté autenticado
+  // 1. Verify that the user is authenticated
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  // Await params para obtener los parámetros
+  // Await params to get the parameters
   const { id: projectId } = await params
 
   if (!projectId) {

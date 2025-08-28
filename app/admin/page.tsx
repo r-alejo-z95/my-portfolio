@@ -28,7 +28,7 @@ export default function AdminPage() {
   const [error, setError] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  // Cargar datos iniciales
+  // Load initial data
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true)

@@ -21,7 +21,7 @@ export async function GET() {
           'Accept': 'application/vnd.github.v3+json',
           'User-Agent': 'Portfolio-App'
         },
-        next: { revalidate: 3600 } // Cache 1 hora
+        next: { revalidate: 3600 } // Cache 1 hour
       }
     )
 

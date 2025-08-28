@@ -39,7 +39,7 @@ export default function GitHubSection() {
       <div className="space-y-8">
         <div className="text-green-400 text-sm font-mono">$ git status</div>
         <div className="text-gray-400 font-mono animate-pulse">
-          Cargando datos de GitHub...
+          Loading GitHub data...
         </div>
       </div>
     )
@@ -73,7 +73,7 @@ export default function GitHubSection() {
       <ContributionGraph />
 
       {/* <div>
-        <h3 className="text-white font-mono text-xl mb-4">Repositorios Recientes</h3>
+        <h3 className="text-white font-mono text-xl mb-4">Recent Repositories</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {repos.slice(0, 6).map((repo) => (
             <RepoCard key={repo.id} repo={repo} />

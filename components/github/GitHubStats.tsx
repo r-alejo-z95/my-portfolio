@@ -19,29 +19,29 @@ export default function GitHubStats({ stats }: GitHubStatsProps) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
       <Card>
-        <h3 className="text-white font-mono text-lg mb-4">Estadísticas</h3>
+        <h3 className="text-white font-mono text-lg mb-4">Statistics</h3>
         <div className="space-y-2 font-mono text-sm">
           <div className="flex justify-between">
-            <span className="text-gray-400">Repositorios públicos:</span>
+            <span className="text-gray-400">Public Repositories:</span>
             <span className="text-green-400">{stats.totalRepos}</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-gray-400">Total estrellas:</span>
+            <span className="text-gray-400">Total Stars:</span>
             <span className="text-green-400">{stats.totalStars}</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-gray-400">Total forks:</span>
+            <span className="text-gray-400">Total Forks:</span>
             <span className="text-green-400">{stats.totalForks}</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-gray-400">Seguidores:</span>
+            <span className="text-gray-400">Followers:</span>
             <span className="text-green-400">{stats.followers}</span>
           </div>
         </div>
       </Card>
 
       <Card>
-        <h3 className="text-white font-mono text-lg mb-4">Lenguajes Top</h3>
+        <h3 className="text-white font-mono text-lg mb-4">Top Languages</h3>
         <div className="space-y-2 font-mono text-sm">
           {topLanguages.map(([language, count]) => (
             <div key={language} className="flex justify-between">

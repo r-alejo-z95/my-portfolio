@@ -23,13 +23,13 @@ export default function ContactSection() {
   const validateForm = (): boolean => {
     const newErrors: Partial<ContactForm> = {}
     
-    if (!form.name.trim()) newErrors.name = 'El nombre es requerido'
+    if (!form.name.trim()) newErrors.name = 'Name is required'
     if (!form.email.trim()) {
-      newErrors.email = 'El email es requerido'
+      newErrors.email = 'Email is required'
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
-      newErrors.email = 'Email inválido'
+      newErrors.email = 'Invalid email'
     }
-    if (!form.message.trim()) newErrors.message = 'El mensaje es requerido'
+    if (!form.message.trim()) newErrors.message = 'Message is required'
 
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
@@ -51,7 +51,7 @@ export default function ContactSection() {
         setIsSubmitted(true)
         setForm({ name: '', email: '', message: '' })
       } else {
-        throw new Error('Error al enviar el mensaje')
+        throw new Error('Error sending message')
       }
     } catch (error) {
       console.error('Error:', error)
@@ -73,7 +73,7 @@ export default function ContactSection() {
       
       <div className="space-y-6 font-mono">
         <p className="text-gray-300 text-lg leading-relaxed">
-          ¿Tienes un proyecto en mente? Me encantaría colaborar contigo y hacer realidad tus ideas.
+          Have a project in mind? I'd love to bring your ideas to life.
         </p>
         
         <div className="space-y-4">
@@ -105,30 +105,30 @@ export default function ContactSection() {
         </div>
 
         <Card className="mt-8">
-          <h3 className="text-white text-lg mb-4">Enviar mensaje</h3>
+          <h3 className="text-white text-lg mb-4">Send Message</h3>
           
           {isSubmitted ? (
             <div className="text-center py-8">
-              <div className="text-green-400 text-lg mb-2">✓ Mensaje enviado</div>
-              <p className="text-gray-400">Te responderé pronto. ¡Gracias por contactarme!</p>
+              <div className="text-green-400 text-lg mb-2">✓ Message sent</div>
+              <p className="text-gray-400">I will reply soon. Thanks for contacting me!</p>
             </div>
           ) : (
             <div className="space-y-4">
               <Input
-                placeholder="Tu nombre"
+                placeholder="Your Name"
                 value={form.name}
                 onChange={(e) => handleInputChange('name', e.target.value)}
                 error={errors.name}
               />
               <Input
                 type="email"
-                placeholder="tu@email.com"
+                placeholder="your@email.com"
                 value={form.email}
                 onChange={(e) => handleInputChange('email', e.target.value)}
                 error={errors.email}
               />
               <TextArea
-                placeholder="Cuéntame sobre tu proyecto..."
+                placeholder="Tell me about your project..."
                 rows={4}
                 value={form.message}
                 onChange={(e) => handleInputChange('message', e.target.value)}
@@ -140,7 +140,7 @@ export default function ContactSection() {
                 className="flex items-center gap-2"
               >
                 <Send size={16} />
-                {isSubmitting ? 'Enviando...' : 'Enviar mensaje'}
+                {isSubmitting ? 'Sending...' : 'Send Message'}
               </Button>
             </div>
           )}

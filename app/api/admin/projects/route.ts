@@ -4,21 +4,21 @@ import { NextResponse, type NextRequest } from 'next/server'
 export async function POST(request: NextRequest) {
   const supabase = await createClient()
 
-  // 1. Verificar que el usuario esté autenticado
+  // 1. Verify that the user is authenticated
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  // 2. Obtener los datos del proyecto del cuerpo de la solicitud
+  // 2. Get the project data from the request body
   const projectData = await request.json()
 
-  // 3. Validación básica de los datos (puedes expandir esto)
+  // 3. Basic data validation (you can expand this)
   if (!projectData.name || !projectData.technologies) {
     return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
   }
 
-  // 4. Insertar en la base de datos
+  // 4. Insert into the database
   try {
     const { data, error } = await supabase
       .from('projects')

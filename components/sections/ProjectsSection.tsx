@@ -13,10 +13,10 @@ interface Project {
 
 async function getFeaturedProjects(): Promise<Project[]> {
   try {
-    // Usamos una URL absoluta para el fetch en el servidor
+    // Use an absolute URL for server-side fetch
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
     const res = await fetch(`${baseUrl}/api/projects`, {
-      // Forzamos que no use caché para que los cambios del admin se reflejen
+      // Force no cache so admin changes are reflected
       cache: 'no-store',
     });
 

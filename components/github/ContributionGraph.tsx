@@ -69,7 +69,7 @@ export default function ContributionGraph() {
   if (loading) {
     return (
       <Card className="flex flex-col items-center">
-        <h3 className="text-white font-mono text-lg mb-4 self-start">Gráfico de Contribuciones</h3>
+        <h3 className="text-white font-mono text-lg mb-4 self-start">Contributions Graph</h3>
         <div className="animate-pulse">
           <div className="flex gap-1 mb-4 overflow-x-auto">
             {Array.from({ length: 53 }).map((_, weekIndex) => (
@@ -88,7 +88,7 @@ export default function ContributionGraph() {
   if (error || !data) {
     return (
       <Card>
-        <h3 className="text-white font-mono text-lg mb-4">Gráfico de Contribuciones</h3>
+        <h3 className="text-white font-mono text-lg mb-4">Contributions Graph</h3>
         <p className="text-red-400 font-mono text-sm">Error: {error}</p>
       </Card>
     )
@@ -99,9 +99,9 @@ export default function ContributionGraph() {
   return (
     <Card>
       <div className="flex justify-between items-center mb-6">
-        <h3 className="text-white font-mono text-lg">Gráfico de Contribuciones</h3>
+        <h3 className="text-white font-mono text-lg">Contributions Graph</h3>
         <span className="text-green-400 font-mono text-sm">
-          {data.totalContributions} contribuciones en el último año
+          {data.totalContributions} contributions in the last year
         </span>
       </div>
       
@@ -111,11 +111,11 @@ export default function ContributionGraph() {
           {/* Etiquetas de días de la semana (fijas a la izquierda) */}
           <div className="flex flex-col pt-1.5 gap-1 text-xs text-gray-400 font-mono mr-3 mt-4">
             <div className="h-3"></div> {/* Domingo - vacío */}
-            <div className="h-3 flex items-center">Lun</div>
+            <div className="h-3 flex items-center">Mon</div>
             <div className="h-3"></div> {/* Martes - vacío */}
-            <div className="h-3 flex items-center">Mié</div>
+            <div className="h-3 flex items-center">Wed</div>
             <div className="h-3"></div> {/* Jueves - vacío */}
-            <div className="h-3 flex items-center">Vie</div>
+            <div className="h-3 flex items-center">Fri</div>
             <div className="h-3"></div> {/* Sábado - vacío */}
           </div>
 
@@ -128,7 +128,7 @@ export default function ContributionGraph() {
                   const date = new Date(week[0].date)
                   const isFirstOfMonth = date.getDate() <= 7 // Primera semana del mes
                   if (isFirstOfMonth || weekIndex === 0) {
-                    const monthName = date.toLocaleDateString('es-ES', { month: 'short', timeZone: 'UTC' })
+                    const monthName = date.toLocaleDateString('en-US', { month: 'short', timeZone: 'UTC' })
                     return <div key={weekIndex} className="w-3 text-center">{monthName}</div>
                   }
                 }
@@ -161,7 +161,7 @@ export default function ContributionGraph() {
       
       {/* Leyenda */}
       <div className="flex justify-center items-center gap-4 mt-4 text-xs font-mono text-gray-400">
-        <span>Menos</span>
+        <span>Less</span>
         <div className="flex items-center gap-1">
           {[0, 1, 2, 3, 4].map(level => (
             <div 
@@ -170,7 +170,7 @@ export default function ContributionGraph() {
             />
           ))}
         </div>
-        <span>Más</span>
+        <span>More</span>
       </div>
     </Card>
   )

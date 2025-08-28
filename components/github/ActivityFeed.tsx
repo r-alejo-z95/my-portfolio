@@ -9,7 +9,7 @@ const mockActivity = [
 export default function ActivityFeed() {
   return (
     <Card>
-      <h3 className="text-white font-mono text-lg mb-4">Actividad Reciente</h3>
+      <h3 className="text-white font-mono text-lg mb-4">Recent Activity</h3>
       <div className="space-y-2 font-mono text-sm">
         {mockActivity.map((activity, index) => (
           <div key={index} className="text-gray-400">

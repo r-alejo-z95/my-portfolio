@@ -7,7 +7,7 @@ interface ContactData {
   message: string
 }
 
-// Configurar transporter de email
+// Configure email transporter
 const createTransporter = () => {
   return nodemailer.createTransport({
     host: process.env.SMTP_HOST,
@@ -24,75 +24,75 @@ export async function POST(request: NextRequest) {
   try {
     const { name, email, message }: ContactData = await request.json()
 
-    // Validación básica
+    // Basic validation
     if (!name?.trim() || !email?.trim() || !message?.trim()) {
       return NextResponse.json(
-        { error: 'Todos los campos son requeridos' },
+        { error: 'All fields are required' },
         { status: 400 }
       )
     }
 
-    // Validación de email
+    // Email Validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(email)) {
       return NextResponse.json(
-        { error: 'Email inválido' },
+        { error: 'Invalid email' },
         { status: 400 }
       )
     }
 
-    // Enviar email de notificación
+    // Send notification email
     if (process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS) {
       try {
         const transporter = createTransporter()
 
-        // Email a ti (notificación)
+        // Email to you (notification)
         await transporter.sendMail({
           from: process.env.SMTP_USER,
           to: process.env.NOTIFICATION_EMAIL || process.env.SMTP_USER,
-          subject: `Nuevo mensaje de contacto de ${name}`,
+          subject: `New contact message from ${name}`,
           html: `
-            <h2>Nuevo mensaje de contacto</h2>
-            <p><strong>Nombre:</strong> ${name}</p>
+            <h2>New contact message</h2>
+            <p><strong>Name:</strong> ${name}</p>
             <p><strong>Email:</strong> ${email}</p>
-            <p><strong>Mensaje:</strong></p>
+            <p><strong>Message:</strong></p>
             <p>${message.replace(/\n/g, '<br>')}</p>
             <hr>
-            <p><small>Enviado desde tu portfolio</small></p>
+            <p><small>Sent from your portfolio</small></p>
           `,
         })
 
-        // Email de confirmación al usuario
+        // Confirmation email to the user
         await transporter.sendMail({
           from: process.env.SMTP_USER,
           to: email,
-          subject: 'Mensaje recibido - Te responderé pronto',
+          subject: 'Message received - I will reply soon',
           html: `
-            <h2>¡Gracias por contactarme!</h2>
-            <p>Hola ${name},</p>
-            <p>He recibido tu mensaje y te responderé lo antes posible.</p>
-            <p><strong>Tu mensaje:</strong></p>
+            <h2>Thanks for contacting me!</h2>
+            <p>Hi ${name},</p>
+            <p>I have received your message and will get back to you as soon as possible.</p>
+            <p><strong>Your message:</strong></p>
             <p>${message.replace(/\n/g, '<br>')}</p>
             <br>
-            <p>Saludos,<br>Ramon</p>
+            <p>Best regards,<br>Ramon</p>
           `,
         })
 
       } catch (emailError) {
         console.error('Error sending email:', emailError)
-        // No fallar la request si el email falla
+        // Do not fail the request if the email fails
       }
     }
 
     return NextResponse.json(
-      { message: 'Mensaje enviado correctamente' },
+      { message: 'Message sent successfully' },
       { status: 200 }
     )
 
   } catch (error) {
-    console.error('Error en /api/contact:', error)
+    console.error('Error in /api/contact:', error)
     return NextResponse.json(
-      { error: 'Error interno del servidor' },
+      { error: 'Internal server error' },
       { status: 500 }
     )
   }

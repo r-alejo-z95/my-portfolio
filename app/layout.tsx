@@ -11,7 +11,7 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: 'Full Stack Developer - Ramon A. Zambrano',
-  description: 'Portfolio de desarrollador full stack especializado en Next.js y tecnologías modernas',
+  description: 'Full stack developer portfolio specializing in Next.js and modern technologies',
 }
 
 export default function RootLayout({
@@ -20,7 +20,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="es" className={jetbrainsMono.variable}>
+    <html lang="en" className={jetbrainsMono.variable}>
       <body className="min-h-screen bg-black text-white font-mono antialiased">
         <Header />
         <main className="max-w-6xl mx-auto px-8 py-16">
