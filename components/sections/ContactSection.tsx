@@ -73,7 +73,7 @@ export default function ContactSection() {
       
       <div className="space-y-6 font-mono">
         <p className="text-gray-300 text-lg leading-relaxed">
-          Have a project in mind? I'd love to bring your ideas to life.
+          Have a project in mind? I&apos;d love to bring your ideas to life.
         </p>
         
         <div className="space-y-4">
