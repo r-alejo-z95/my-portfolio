@@ -98,7 +98,7 @@ export default function ContributionGraph() {
 
   return (
     <Card>
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex gap-2 md:gap-0 justify-around md:justify-between items-center mb-6">
         <h3 className="text-white font-mono text-lg">Contributions Graph</h3>
         <span className="text-green-400 font-mono text-sm">
           {data.totalContributions} contributions in the last year
