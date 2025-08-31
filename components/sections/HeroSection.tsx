@@ -86,12 +86,13 @@ export default function HeroSection({ onDownloadRequest, className }: HeroSectio
             <span className="text-green-400">&gt;</span> Passionate about code
           </div>
         </div>
-        <div className="w-[200px] h-[200px] md:w-[300px] md:h-[300px] mb-24 md:mb-8">
+        <div className="w-[300px] h-[250px] md:w-[450px] md:h-[450px] mb-24 md:mb-[-100px]">
           <Image
-            src="/ramon.png"
+            src="/ramon.jpeg"
             alt="Photo of Ramon"
             width={1024}
-            height={1536}
+            height={1024}
+            sizes="100vw"
             className="rounded-full object-center object-cover"
             priority // Add priority for the main image
           />
