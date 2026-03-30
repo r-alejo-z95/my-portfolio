@@ -1,15 +1,35 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import Card from '@/components/ui/Card'
 
 function DayTooltip({ content, className }: { content: string; className: string }) {
+  const [pos, setPos] = useState<{ x: number; y: number } | null>(null)
+  const ref = useRef<HTMLDivElement>(null)
+
+  const handleMouseEnter = () => {
+    if (ref.current) {
+      const rect = ref.current.getBoundingClientRect()
+      setPos({ x: rect.left + rect.width / 2, y: rect.top })
+    }
+  }
+
   return (
-    <div className="relative group/day">
-      <div className={className} />
-      <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2 py-1 bg-gray-900 border border-gray-700 text-white text-xs font-mono whitespace-nowrap opacity-0 group-hover/day:opacity-100 transition-opacity pointer-events-none z-50 rounded-sm">
-        {content}
-      </div>
-    </div>
+    <>
+      <div
+        ref={ref}
+        className={className}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={() => setPos(null)}
+      />
+      {pos && (
+        <div
+          className="fixed z-[9999] pointer-events-none bg-gray-900 border border-gray-700 text-white text-xs font-mono px-2 py-1 whitespace-nowrap rounded-sm -translate-x-1/2"
+          style={{ left: pos.x, top: pos.y - 8, transform: 'translateX(-50%) translateY(-100%)' }}
+        >
+          {content}
+        </div>
+      )}
+    </>
   )
 }
 
