@@ -112,7 +112,11 @@ export default function ProjectModal({
     }
 
     try {
-      const isEdit = mode === 'edit' && initialData?.id
+      if (mode === 'edit' && !initialData?.id) {
+        setServerError('Cannot edit: project ID is missing.')
+        return
+      }
+      const isEdit = mode === 'edit'
       const url = isEdit
         ? `/api/admin/projects/${initialData!.id}`
         : '/api/admin/projects'
