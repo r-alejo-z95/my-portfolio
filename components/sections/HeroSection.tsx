@@ -12,6 +12,7 @@ interface HeroSectionProps {
 export default function HeroSection({ onDownloadRequest, className }: HeroSectionProps) {
   const [isLoaded, setIsLoaded] = useState(false)
   const [isDownloading, setIsDownloading] = useState(false)
+  const [downloadError, setDownloadError] = useState<string | null>(null)
 
   useEffect(() => {
     setIsLoaded(true)
@@ -20,6 +21,7 @@ export default function HeroSection({ onDownloadRequest, className }: HeroSectio
   const handleDownloadCV = async () => {
     if (isDownloading) return
     setIsDownloading(true)
+    setDownloadError(null)
 
     try {
       const response = await fetch('/api/download-cv')
@@ -45,7 +47,7 @@ export default function HeroSection({ onDownloadRequest, className }: HeroSectio
         if (error.message.includes('HTTP error')) errorMessage = 'Server is unavailable. Please try again later.'
         else if (error.message.includes('empty')) errorMessage = 'File is empty or corrupted.'
       }
-      alert(errorMessage)
+      setDownloadError(errorMessage)
     } finally {
       setIsDownloading(false)
     }
@@ -86,17 +88,22 @@ export default function HeroSection({ onDownloadRequest, className }: HeroSectio
         </div>
       </div>
 
-      <div className="flex gap-4 flex-wrap self-center md:self-start">
-        <Link href="/projects">
-          <Button variant="primary">View Projects</Button>
-        </Link>
-        <Button
-          variant="outline"
-          onClick={() => onDownloadRequest(handleDownloadCV)}
-          disabled={isDownloading}
-        >
-          {isDownloading ? 'Downloading...' : 'Download CV'}
-        </Button>
+      <div className="flex flex-col gap-3 self-center md:self-start">
+        <div className="flex gap-4 flex-wrap">
+          <Link href="/projects">
+            <Button variant="primary">View Projects</Button>
+          </Link>
+          <Button
+            variant="outline"
+            onClick={() => onDownloadRequest(handleDownloadCV)}
+            disabled={isDownloading}
+          >
+            {isDownloading ? 'Downloading...' : 'Download CV'}
+          </Button>
+        </div>
+        {downloadError && (
+          <p className="text-red-400 font-mono text-sm">{downloadError}</p>
+        )}
       </div>
     </section>
   )
