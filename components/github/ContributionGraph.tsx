@@ -1,13 +1,17 @@
 'use client'
-import { useEffect, useState, forwardRef } from 'react'
+import { useEffect, useState } from 'react'
 import Card from '@/components/ui/Card'
-import Tippy from '@tippyjs/react'
 
-// forwardRef wrapper required for React 19 compatibility with Tippy
-const DayCell = forwardRef<HTMLDivElement, { className: string }>(
-  ({ className }, ref) => <div ref={ref} className={className} />
-)
-DayCell.displayName = 'DayCell'
+function DayTooltip({ content, className }: { content: string; className: string }) {
+  return (
+    <div className="relative group/day">
+      <div className={className} />
+      <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2 py-1 bg-gray-900 border border-gray-700 text-white text-xs font-mono whitespace-nowrap opacity-0 group-hover/day:opacity-100 transition-opacity pointer-events-none z-50 rounded-sm">
+        {content}
+      </div>
+    </div>
+  )
+}
 
 interface ContributionDay {
   date: string
@@ -147,16 +151,11 @@ export default function ContributionGraph() {
               {weeks.map((week, weekIndex) => (
                 <div key={weekIndex} className="flex flex-col gap-1">
                   {week.map((day, dayIndex) => (
-                    <Tippy 
-                    key={`${day.date}-${weekIndex}-${dayIndex}`}
-                    content={day.count === 0 ? `No contributions on ${formatDate(day.date)}` : `${day.count} contribution${day.count !== 1 ? 's' : ''} on ${formatDate(day.date)}`}
-                    delay={[200, 0]}
-                    className='bg-black/40 backdrop-blur-xs text-white text-xs px-2 py-1 shadow-lg'
-                    >
-                      <DayCell
-                        className={`w-3 h-3 border ${getIntensityClass(day.level)} hover:ring-1 hover:ring-green-400 cursor-pointer transition-all rounded-sm`}
-                      />
-                    </Tippy>
+                    <DayTooltip
+                      key={`${day.date}-${weekIndex}-${dayIndex}`}
+                      content={day.count === 0 ? `No contributions on ${formatDate(day.date)}` : `${day.count} contribution${day.count !== 1 ? 's' : ''} on ${formatDate(day.date)}`}
+                      className={`w-3 h-3 border ${getIntensityClass(day.level)} hover:ring-1 hover:ring-green-400 cursor-pointer transition-all rounded-sm`}
+                    />
                   ))}
                 </div>
               ))}
