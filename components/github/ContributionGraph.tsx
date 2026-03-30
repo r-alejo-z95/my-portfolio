@@ -1,7 +1,13 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, forwardRef } from 'react'
 import Card from '@/components/ui/Card'
 import Tippy from '@tippyjs/react'
+
+// forwardRef wrapper required for React 19 compatibility with Tippy
+const DayCell = forwardRef<HTMLDivElement, { className: string }>(
+  ({ className }, ref) => <div ref={ref} className={className} />
+)
+DayCell.displayName = 'DayCell'
 
 interface ContributionDay {
   date: string
@@ -147,7 +153,7 @@ export default function ContributionGraph() {
                     delay={[200, 0]}
                     className='bg-black/40 backdrop-blur-xs text-white text-xs px-2 py-1 shadow-lg'
                     >
-                      <div
+                      <DayCell
                         className={`w-3 h-3 border ${getIntensityClass(day.level)} hover:ring-1 hover:ring-green-400 cursor-pointer transition-all rounded-sm`}
                       />
                     </Tippy>
