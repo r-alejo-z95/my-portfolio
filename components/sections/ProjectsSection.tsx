@@ -16,7 +16,7 @@ interface Project {
 async function getFeaturedProjects(): Promise<Project[]> {
   try {
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
-    const res = await fetch(`${baseUrl}/api/projects`, { cache: 'no-store' });
+    const res = await fetch(`${baseUrl}/api/projects`, { next: { revalidate: 60 } });
     if (!res.ok) {
       console.error('Failed to fetch projects');
       return [];
