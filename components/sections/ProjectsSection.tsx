@@ -8,6 +8,7 @@ interface Project {
   description: string | null;
   repo_url: string | null;
   live_url: string | null;
+  image_url: string | null;
   technologies: string[];
 }
 
