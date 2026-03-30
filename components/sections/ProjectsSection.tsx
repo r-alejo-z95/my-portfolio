@@ -1,6 +1,7 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { ExternalLink, Github } from 'lucide-react'
-import Card  from '@/components/ui/Card'
+import Card from '@/components/ui/Card'
 
 interface Project {
   id: number;
@@ -14,13 +15,8 @@ interface Project {
 
 async function getFeaturedProjects(): Promise<Project[]> {
   try {
-    // Use an absolute URL for server-side fetch
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
-    const res = await fetch(`${baseUrl}/api/projects`, {
-      // Force no cache so admin changes are reflected
-      cache: 'no-store',
-    });
-
+    const res = await fetch(`${baseUrl}/api/projects`, { cache: 'no-store' });
     if (!res.ok) {
       console.error('Failed to fetch projects');
       return [];
@@ -35,15 +31,27 @@ async function getFeaturedProjects(): Promise<Project[]> {
 function ProjectCard({ project }: { project: Project }) {
   return (
     <Card variant="interactive">
+      {project.image_url && (
+        <div className="h-48 relative mb-4 border border-gray-800 overflow-hidden -mx-6 -mt-6">
+          <Image
+            src={project.image_url}
+            alt={`${project.name} preview`}
+            fill
+            className="object-cover group-hover:scale-105 transition-transform duration-500"
+            unoptimized
+          />
+        </div>
+      )}
+
       <div className="flex justify-between items-start mb-4">
         <h3 className="text-white font-mono text-xl group-hover:text-green-400 transition-colors">
           {project.name}.js
         </h3>
         <div className="flex gap-3">
           {project.live_url && (
-            <Link 
-              href={project.live_url} 
-              target="_blank" 
+            <Link
+              href={project.live_url}
+              target="_blank"
               rel="noopener noreferrer"
               className="text-gray-400 hover:text-green-400 transition-colors"
               aria-label={`Live demo for ${project.name}`}
@@ -52,9 +60,9 @@ function ProjectCard({ project }: { project: Project }) {
             </Link>
           )}
           {project.repo_url && (
-            <Link 
+            <Link
               href={project.repo_url}
-              target="_blank" 
+              target="_blank"
               rel="noopener noreferrer"
               className="text-gray-400 hover:text-green-400 transition-colors"
               aria-label={`GitHub repository for ${project.name}`}
@@ -64,17 +72,17 @@ function ProjectCard({ project }: { project: Project }) {
           )}
         </div>
       </div>
-      
+
       {project.description && (
         <p className="text-gray-400 font-mono text-sm mb-4 leading-relaxed">
           {project.description}
         </p>
       )}
-      
+
       <div className="flex gap-2 flex-wrap">
         {project.technologies.map((tech) => (
-          <span 
-            key={tech} 
+          <span
+            key={tech}
             className="text-xs font-mono bg-gray-800 text-gray-300 px-2 py-1 border border-gray-700 rounded"
           >
             {tech}
@@ -91,7 +99,7 @@ export default async function ProjectsSection() {
   return (
     <section>
       <div className="text-green-400 text-sm mb-6 font-mono">$ ls ~/featured-projects</div>
-      
+
       {projects.length > 0 ? (
         <div className="space-y-8">
           {projects.map((project) => (
