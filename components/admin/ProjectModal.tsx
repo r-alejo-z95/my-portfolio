@@ -149,6 +149,19 @@ export default function ProjectModal({
     if (errors[field]) setErrors(prev => ({ ...prev, [field]: undefined }))
   }
 
+  const screenshotUrl = isValidUrl(form.live_url)
+    ? `https://api.microlink.io/?url=${encodeURIComponent(form.live_url)}&screenshot=true&meta=false&embed=screenshot.url`
+    : null
+
+  const handleGenerateScreenshot = () => {
+    if (!screenshotUrl) return
+    if (form.image_url && form.image_url !== screenshotUrl) {
+      if (!window.confirm('This will replace the existing preview image URL. Continue?')) return
+    }
+    setField('image_url')(screenshotUrl)
+    setImageError(false)
+  }
+
   const showImagePreview = form.image_url && !imageError && isValidUrl(form.image_url)
 
   if (!isOpen) return null
@@ -219,8 +232,18 @@ export default function ProjectModal({
           </div>
 
           <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <label className="block text-sm font-mono text-gray-300">Preview Image URL</label>
+              <button
+                type="button"
+                onClick={handleGenerateScreenshot}
+                disabled={!screenshotUrl}
+                className="text-xs font-mono px-2 py-1 border border-gray-700 text-gray-400 hover:border-green-400 hover:text-green-400 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+              >
+                generate from live url
+              </button>
+            </div>
             <Input
-              label="Preview Image URL"
               value={form.image_url}
               onChange={e => {
                 setField('image_url')(e.target.value)

@@ -32,12 +32,12 @@ function ProjectCard({ project }: { project: Project }) {
   return (
     <Card variant="interactive">
       {project.image_url && (
-        <div className="h-48 relative mb-4 border border-gray-800 overflow-hidden -mx-6 -mt-6">
+        <div className="h-80 relative mb-4 border border-gray-800 overflow-hidden -mx-6 -mt-6">
           <Image
             src={project.image_url}
             alt={`${project.name} preview`}
             fill
-            className="object-cover group-hover:scale-105 transition-transform duration-500"
+            className="object-cover object-top group-hover:scale-105 transition-transform duration-500"
             unoptimized
           />
         </div>

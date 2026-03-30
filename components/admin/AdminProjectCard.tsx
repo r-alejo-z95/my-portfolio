@@ -28,7 +28,7 @@ export default function AdminProjectCard({ project, onEdit, onDelete }: AdminPro
             src={project.image_url}
             alt={`${project.name} preview`}
             fill
-            className="object-cover"
+            className="object-cover object-top"
             unoptimized
           />
         </div>
