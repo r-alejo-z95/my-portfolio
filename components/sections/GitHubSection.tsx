@@ -16,13 +16,8 @@ export default function GitHubSection() {
     async function fetchGitHubData() {
       try {
         const statsResponse = await fetch('/api/github/stats')
-
-        if (!statsResponse.ok) {
-          throw new Error('Failed to fetch GitHub data')
-        }
-
-        const statsData = await statsResponse.json()
-        setStats(statsData)
+        if (!statsResponse.ok) throw new Error('Failed to fetch GitHub data')
+        setStats(await statsResponse.json())
       } catch (err) {
         setError('Error loading GitHub data')
         console.error(err)
@@ -30,16 +25,22 @@ export default function GitHubSection() {
         setLoading(false)
       }
     }
-
     fetchGitHubData()
   }, [])
 
   if (loading) {
     return (
       <div className="space-y-8">
-        <div className="text-green-400 text-sm font-mono">$ git status</div>
-        <div className="text-gray-400 font-mono animate-pulse">
-          Loading GitHub data...
+        <div className="text-green-400 text-sm font-mono">$ git log --oneline</div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {[1, 2].map(i => (
+            <div key={i} className="border border-gray-800 bg-gray-900/30 p-6 animate-pulse">
+              <div className="h-4 bg-gray-800 rounded w-1/3 mb-4" />
+              {[1, 2, 3, 4].map(j => (
+                <div key={j} className="h-3 bg-gray-800 rounded w-full mb-2" />
+              ))}
+            </div>
+          ))}
         </div>
       </div>
     )
@@ -47,39 +48,30 @@ export default function GitHubSection() {
 
   if (error) {
     return (
-      <div className="space-y-8">
-        <div className="text-green-400 text-sm font-mono">$ git status</div>
-        <div className="text-red-400 font-mono">
-          Error: {error}
-        </div>
+      <div className="space-y-4">
+        <div className="text-green-400 text-sm font-mono">$ git log --oneline</div>
+        <div className="text-red-400 font-mono text-sm">Error: {error}</div>
       </div>
     )
   }
 
   return (
     <div className="space-y-8">
-      <div className="text-green-400 text-sm mb-6 font-mono">$ git status</div>
-        <Link 
+      <div className="flex items-center justify-between">
+        <div className="text-green-400 text-sm font-mono">$ git log --oneline</div>
+        <Link
           href={SOCIAL_LINKS.github}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-3 text-gray-400 hover:text-green-400 transition-colors"
+          className="flex items-center gap-2 text-gray-400 hover:text-green-400 transition-colors font-mono text-sm"
         >
-          <Github size={20} />
+          <Github size={16} />
           <span>github.com/r-alejo-z95</span>
         </Link>
-      {stats && <GitHubStats stats={stats} />}
-      
-      <ContributionGraph />
+      </div>
 
-      {/* <div>
-        <h3 className="text-white font-mono text-xl mb-4">Recent Repositories</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {repos.slice(0, 6).map((repo) => (
-            <RepoCard key={repo.id} repo={repo} />
-          ))}
-        </div>
-      </div> */}
+      {stats && <GitHubStats stats={stats} />}
+      <ContributionGraph />
     </div>
   )
 }

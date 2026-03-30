@@ -5,7 +5,7 @@ import { SKILLS } from '@/lib/constants'
 const skillIcons = {
   frontend: Code2,
   backend: Terminal,
-  tools: Activity
+  tools: Activity,
 }
 
 export default function SkillsSection() {
@@ -15,14 +15,23 @@ export default function SkillsSection() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {Object.entries(SKILLS).map(([key, skill]) => {
           const Icon = skillIcons[key as keyof typeof skillIcons]
-          
+
           return (
             <Card key={key}>
-              <Icon className="text-green-400 mb-4" size={24} />
-              <h3 className="text-white font-mono text-lg mb-2">{skill.title}</h3>
-              <p className="text-gray-400 font-mono text-sm">
-                {skill.technologies.join(', ')}
-              </p>
+              <div className="flex items-center gap-3 mb-4">
+                <Icon className="text-green-400" size={20} />
+                <h3 className="text-white font-mono text-base font-semibold">{skill.title}</h3>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {skill.technologies.map(tech => (
+                  <span
+                    key={tech}
+                    className="text-xs font-mono bg-gray-800 text-gray-300 px-2 py-1 border border-gray-700/80"
+                  >
+                    {tech}
+                  </span>
+                ))}
+              </div>
             </Card>
           )
         })}

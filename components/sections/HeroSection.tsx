@@ -18,93 +18,80 @@ export default function HeroSection({ onDownloadRequest, className }: HeroSectio
   }, [])
 
   const handleDownloadCV = async () => {
-    if (isDownloading) return; // Prevent multiple simultaneous downloads
-    
-    setIsDownloading(true);
-    
+    if (isDownloading) return
+    setIsDownloading(true)
+
     try {
-      const response = await fetch('/api/download-cv');
+      const response = await fetch('/api/download-cv')
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
+      const blob = await response.blob()
+      if (blob.size === 0) throw new Error('Downloaded file is empty')
 
-      const blob = await response.blob();
-      
-      // Check that the blob is not empty
-      if (blob.size === 0) {
-        throw new Error('Downloaded file is empty');
-      }
-
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = 'Ramon_Zambrano_developer.pdf';
-      
-      // Make the download more robust
-      document.body.appendChild(link);
-      link.click();
-      
-      // Cleanup with timeout to ensure download completes
+      const url = window.URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = 'Ramon_Zambrano_developer.pdf'
+      document.body.appendChild(link)
+      link.click()
       setTimeout(() => {
-        document.body.removeChild(link);
-        window.URL.revokeObjectURL(url);
-      }, 100);
-      
+        document.body.removeChild(link)
+        window.URL.revokeObjectURL(url)
+      }, 100)
     } catch (error) {
-      console.error('Error during CV download:', error);
-      
-      // More specific error message based on error type
-      let errorMessage = 'Error downloading CV. Please try again later.';
-      
+      console.error('Error during CV download:', error)
+      let errorMessage = 'Error downloading CV. Please try again later.'
       if (error instanceof Error) {
-        if (error.message.includes('HTTP error')) {
-          errorMessage = 'Server is unavailable. Please try again later.';
-        } else if (error.message.includes('empty')) {
-          errorMessage = 'File is empty or corrupted.';
-        }
+        if (error.message.includes('HTTP error')) errorMessage = 'Server is unavailable. Please try again later.'
+        else if (error.message.includes('empty')) errorMessage = 'File is empty or corrupted.'
       }
-      
-      alert(errorMessage);
+      alert(errorMessage)
     } finally {
-      setIsDownloading(false);
+      setIsDownloading(false)
     }
-  };
+  }
 
   return (
-    <section className={`transition-all duration-700 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'} flex flex-col ${className}`}>
-      <div className="flex flex-col-reverse items-center md:flex-row md:justify-between md:items-start lg:mr-16 mb-8">
-        <div>
-          <div className="text-green-400 text-sm mb-2 font-mono">$ whoami</div>
-          <h1 className="text-4xl md:text-6xl font-mono font-bold text-white mb-4 leading-tight">
+    <section
+      className={`transition-all duration-700 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'} flex flex-col ${className}`}
+    >
+      <div className="flex flex-col-reverse items-center md:flex-row md:justify-between md:items-start lg:mr-16 mb-8 gap-8">
+        <div className="flex-1">
+          <div className="text-green-400 text-sm mb-3 font-mono tracking-wider">$ whoami</div>
+          <h1 className="text-4xl md:text-6xl font-mono font-bold text-white mb-6 leading-tight">
             Full Stack<br />
-            <span className="text-green-400">Developer</span>
+            <span className="text-green-400">
+              Developer
+              <span className="animate-pulse text-green-300 ml-1 text-3xl md:text-5xl">_</span>
+            </span>
           </h1>
-          <div className="text-gray-400 font-mono text-lg max-w-2xl leading-relaxed">
-            <span className="text-green-400">&gt;</span> Building modern web experiences<br />
-            <span className="text-green-400">&gt;</span> Next.js, React, Node.js, PostgreSQL<br />
-            <span className="text-green-400">&gt;</span> Passionate about code
+          <div className="text-gray-400 font-mono text-base md:text-lg max-w-xl leading-loose space-y-1">
+            <p><span className="text-green-400">&gt;</span> Building modern web experiences</p>
+            <p><span className="text-green-400">&gt;</span> Next.js · React · Node.js · PostgreSQL</p>
+            <p><span className="text-green-400">&gt;</span> Passionate about clean, fast code</p>
           </div>
         </div>
-        <div className="w-[300px] h-[250px] md:w-[450px] md:h-[450px] mb-24 md:mb-[-100px]">
-          <Image
-            src="/ramon.jpeg"
-            alt="Photo of Ramon"
-            width={1024}
-            height={1024}
-            sizes="100vw"
-            className="rounded-full object-center object-cover"
-            priority // Add priority for the main image
-          />
+
+        <div className="w-[240px] h-[240px] md:w-[380px] md:h-[380px] flex-shrink-0">
+          <div className="relative w-full h-full rounded-full overflow-hidden border-2 border-gray-800 hover:border-green-400/50 transition-all duration-300 hover:shadow-[0_0_30px_rgba(74,222,128,0.15)]">
+            <Image
+              src="/ramon.jpeg"
+              alt="Photo of Ramon"
+              fill
+              sizes="(max-width: 768px) 240px, 380px"
+              className="object-cover object-center"
+              priority
+            />
+          </div>
         </div>
       </div>
-      
-      <div className="flex gap-4 mb-12 flex-wrap self-center md:self-start">
+
+      <div className="flex gap-4 flex-wrap self-center md:self-start">
         <Link href="/projects">
           <Button variant="primary">View Projects</Button>
         </Link>
-        <Button 
-          variant="outline" 
+        <Button
+          variant="outline"
           onClick={() => onDownloadRequest(handleDownloadCV)}
           disabled={isDownloading}
         >
