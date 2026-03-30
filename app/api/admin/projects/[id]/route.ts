@@ -86,6 +86,9 @@ export async function PUT(
       .single()
 
     if (error) {
+      if (error.code === 'PGRST116') {
+        return NextResponse.json({ error: 'Project not found' }, { status: 404 })
+      }
       console.error('Supabase error:', error.message)
       return NextResponse.json({ error: error.message }, { status: 500 })
     }
