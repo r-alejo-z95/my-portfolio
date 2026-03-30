@@ -1,36 +1,41 @@
 import { createClient } from '@/lib/supabase/server'
 import { NextResponse, type NextRequest } from 'next/server'
 
+function isValidUrl(url: string): boolean {
+  try { new URL(url); return true } catch { return false }
+}
+
 export async function POST(request: NextRequest) {
   const supabase = await createClient()
 
-  // 1. Verify that the user is authenticated
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  // 2. Get the project data from the request body
   const projectData = await request.json()
 
-  // 3. Basic data validation (you can expand this)
   if (!projectData.name || !projectData.technologies) {
     return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
   }
 
-  // 4. Insert into the database
+  for (const field of ['repo_url', 'live_url', 'image_url'] as const) {
+    if (projectData[field] && !isValidUrl(projectData[field])) {
+      return NextResponse.json({ error: `Invalid URL for ${field}` }, { status: 400 })
+    }
+  }
+
   try {
     const { data, error } = await supabase
       .from('projects')
-      .insert([
-        {
-          name: projectData.name,
-          description: projectData.description,
-          repo_url: projectData.repo_url,
-          live_url: projectData.live_url,
-          technologies: projectData.technologies,
-        },
-      ])
+      .insert([{
+        name: projectData.name,
+        description: projectData.description ?? null,
+        repo_url: projectData.repo_url ?? null,
+        live_url: projectData.live_url ?? null,
+        image_url: projectData.image_url ?? null,
+        technologies: projectData.technologies,
+      }])
       .select()
       .single()
 
