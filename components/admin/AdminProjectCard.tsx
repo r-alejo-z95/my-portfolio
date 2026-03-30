@@ -1,7 +1,9 @@
 'use client'
 import Image from 'next/image'
-import { ExternalLink, Github, Pencil, Trash2 } from 'lucide-react'
+import { ExternalLink, Github, Pencil, Trash2, GripVertical } from 'lucide-react'
 import Button from '@/components/ui/Button'
+import { useSortable } from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
 
 interface FeaturedProject {
   id: number
@@ -20,8 +22,22 @@ interface AdminProjectCardProps {
 }
 
 export default function AdminProjectCard({ project, onEdit, onDelete }: AdminProjectCardProps) {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id: project.id,
+  })
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.4 : 1,
+  }
+
   return (
-    <div className="bg-gray-800 border border-gray-700 overflow-hidden flex flex-col">
+    <div
+      ref={setNodeRef}
+      style={style}
+      className="bg-gray-800 border border-gray-700 overflow-hidden flex flex-col"
+    >
       {project.image_url && (
         <div className="h-36 relative border-b border-gray-700">
           <Image
@@ -36,6 +52,15 @@ export default function AdminProjectCard({ project, onEdit, onDelete }: AdminPro
 
       <div className="p-4 flex flex-col gap-3 flex-1">
         <div className="flex justify-between items-start gap-2">
+          <button
+            {...attributes}
+            {...listeners}
+            className="text-gray-600 hover:text-gray-400 cursor-grab active:cursor-grabbing mt-0.5 flex-shrink-0 touch-none"
+            aria-label="Drag to reorder"
+          >
+            <GripVertical size={16} />
+          </button>
+
           <div className="flex-1 min-w-0">
             <p className="text-white font-mono font-semibold truncate">{project.name}</p>
             {project.description && (

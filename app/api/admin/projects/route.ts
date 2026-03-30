@@ -26,6 +26,15 @@ export async function POST(request: NextRequest) {
   }
 
   try {
+    const { data: maxData } = await supabase
+      .from('projects')
+      .select('sort_order')
+      .order('sort_order', { ascending: false })
+      .limit(1)
+      .single()
+
+    const nextSortOrder = maxData?.sort_order != null ? maxData.sort_order + 1 : 1
+
     const { data, error } = await supabase
       .from('projects')
       .insert([{
@@ -35,6 +44,7 @@ export async function POST(request: NextRequest) {
         live_url: projectData.live_url ?? null,
         image_url: projectData.image_url ?? null,
         technologies: projectData.technologies,
+        sort_order: nextSortOrder,
       }])
       .select()
       .single()

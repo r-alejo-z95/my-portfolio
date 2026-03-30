@@ -10,6 +10,19 @@ import AdminProjectCard from '@/components/admin/AdminProjectCard'
 import ProjectModal from '@/components/admin/ProjectModal'
 import ConfirmModal from '@/components/admin/ConfirmModal'
 import { Plus, Github, LogOut } from 'lucide-react'
+import {
+  DndContext,
+  closestCenter,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  type DragEndEvent,
+} from '@dnd-kit/core'
+import {
+  SortableContext,
+  arrayMove,
+  rectSortingStrategy,
+} from '@dnd-kit/sortable'
 
 interface FeaturedProject {
   id: number
@@ -78,6 +91,29 @@ export default function AdminPage() {
     await supabase.auth.signOut()
     router.push('/login')
     router.refresh()
+  }
+
+  const sensors = useSensors(useSensor(PointerSensor))
+
+  const handleDragEnd = async (event: DragEndEvent) => {
+    const { active, over } = event
+    if (!over || active.id === over.id) return
+
+    const oldIndex = featuredProjects.findIndex(p => p.id === active.id)
+    const newIndex = featuredProjects.findIndex(p => p.id === over.id)
+    const reordered = arrayMove(featuredProjects, oldIndex, newIndex)
+    setFeaturedProjects(reordered)
+
+    const response = await fetch('/api/admin/projects/reorder', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ids: reordered.map(p => p.id) }),
+    })
+
+    if (!response.ok) {
+      const data = await response.json()
+      setError(`Failed to save order: ${data.error}`)
+    }
   }
 
   const handleProjectSuccess = (project: FeaturedProject) => {
@@ -174,16 +210,20 @@ export default function AdminPage() {
             // No featured projects yet. Click &quot;Add Project&quot; to get started.
           </p>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {featuredProjects.map(project => (
-              <AdminProjectCard
-                key={project.id}
-                project={project}
-                onEdit={project => setModalState({ type: 'edit', project })}
-                onDelete={project => setDeleteTarget(project)}
-              />
-            ))}
-          </div>
+          <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+            <SortableContext items={featuredProjects.map(p => p.id)} strategy={rectSortingStrategy}>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {featuredProjects.map(project => (
+                  <AdminProjectCard
+                    key={project.id}
+                    project={project}
+                    onEdit={project => setModalState({ type: 'edit', project })}
+                    onDelete={project => setDeleteTarget(project)}
+                  />
+                ))}
+              </div>
+            </SortableContext>
+          </DndContext>
         )}
       </section>
 
